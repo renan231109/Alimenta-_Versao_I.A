@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+  .ai-container {
+    @apply flex min-h-screen items-center justify-center bg-gray-900 px-4;
+  }
+
+  .ai-painel {
+    @apply w-full max-w-2xl rounded-2xl bg-white p-8 shadow-lg;
+  }
+
+  .ai-title {
+    @apply mb-2 text-2xl font-bold text-blue-600;
+  }
+
+  .ai-subtitle {
+    @apply mb-6 text-sm text-gray-500;
+  }
+
+  .ai-campo {
+    @apply mb-4;
+  }
+
+  .ai-label {
+    @apply mb-2 block text-sm font-medium text-gray-700;
+  }
+
+  .ai-textarea {
+    @apply w-full min-h-[120px] resize-none rounded-xl border border-gray-300 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300;
+  }
+
+  .ai-botoes {
+    @apply flex gap-4 mb-4;
+  }
+
+  .ai-btn {
+    @apply rounded-xl bg-blue-600 px-6 py-3 text-white hover:bg-blue-700;
+  }
+
+  .ai-btn-reset {
+    @apply rounded-xl border border-blue-600 px-6 py-3 text-blue-600 hover:bg-blue-50;
+  }
+
+  .ai-erro {
+    @apply mb-4 rounded-xl bg-red-100 px-4 py-2 text-red-700;
+  }
+
+  .ai-resultado {
+    @apply mt-4 rounded-2xl bg-white p-6 shadow;
+  }
+
+  .ai-resultado h2 {
+    @apply mb-2 text-lg font-semibold text-blue-600;
+  }
+
+  .ai-markdown {
+    @apply text-gray-800 leading-7;
+  }
+
+}

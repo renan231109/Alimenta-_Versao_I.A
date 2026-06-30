@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white shadow-soft transition-all hover:bg-primary-700 hover:shadow-glow focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border-2 border-primary-600 bg-white px-6 py-3 font-semibold text-primary-700 transition-all hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .btn-trust {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-trust-600 px-6 py-3 font-semibold text-white shadow-soft transition-all hover:bg-trust-700 focus:outline-none focus:ring-2 focus:ring-trust-500 focus:ring-offset-2;
+  }
+
+  .card {
+    @apply rounded-2xl bg-white p-6 shadow-card transition-shadow hover:shadow-soft;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 transition-colors;
+  }
+
+  .input-field::placeholder {
+    @apply text-gray-400;
+  }
+
+  /* Estados que não podem ser usados em @apply */
+  .input-field:focus {
+    @apply border-primary-500 outline-none ring-2 ring-primary-500/20;
+  }
+
+  .badge-urgency-alta {
+    @apply inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700;
+  }
+
+  .badge-urgency-media {
+    @apply inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700;
+  }
+
+  .badge-urgency-baixa {
+    @apply inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700;
+  }
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  z-index: 0;
+}
