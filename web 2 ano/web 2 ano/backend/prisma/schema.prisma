@@ -1,0 +1,219 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  DOADOR
+  ONG
+  FAMILIA
+  VOLUNTARIO
+  ADMIN
+}
+
+enum DonationCategory {
+  FRUTAS
+  VERDURAS
+  LEGUMES
+  PADARIA
+  LATICINIOS
+  REFEICOES_PRONTAS
+  NAO_PERECIVEIS
+  OUTROS
+}
+
+enum DonationStatus {
+  DISPONIVEL
+  SOLICITADA
+  APROVADA
+  AGENDADA
+  EM_ENTREGA
+  ENTREGUE
+  CANCELADA
+  EXPIRADA
+}
+
+enum UrgencyLevel {
+  ALTA
+  MEDIA
+  BAIXA
+}
+
+enum RequestStatus {
+  PENDENTE
+  APROVADA
+  REJEITADA
+  AGENDADA
+  CONCLUIDA
+  CANCELADA
+}
+
+enum DeliveryStatus {
+  PENDENTE
+  ACEITA
+  EM_ROTA
+  ENTREGUE
+  CANCELADA
+}
+
+enum GamificationLevel {
+  SEMENTE
+  BROTO
+  ARVORE
+  FLORESTA_SOLIDARIA
+}
+
+model User {
+  id              String            @id @default(uuid())
+  name            String
+  email           String            @unique
+  password        String
+  role            UserRole          @default(DOADOR)
+  phone           String?
+  avatar          String?
+  bio             String?
+  address         String?
+  city            String?           @default("São José do Rio Preto")
+  state           String?           @default("SP")
+  latitude        Float?
+  longitude       Float?
+  emailVerified   Boolean           @default(false)
+  verifyToken     String?
+  resetToken      String?
+  resetTokenExp   DateTime?
+  points          Int               @default(0)
+  level           GamificationLevel @default(SEMENTE)
+  totalKgSaved    Float             @default(0)
+  peopleImpacted  Int               @default(0)
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  donations       Donation[]
+  requests        DonationRequest[]
+  deliveries      Delivery[]        @relation("VolunteerDeliveries")
+  reviewsGiven    Review[]          @relation("ReviewsGiven")
+  reviewsReceived Review[]          @relation("ReviewsReceived")
+  achievements    UserAchievement[]
+
+  @@map("users")
+}
+
+model Donation {
+  id              String           @id @default(uuid())
+  name            String
+  category        DonationCategory
+  quantity        String
+  weightKg        Float
+  expiryDate      DateTime
+  photo           String?
+  address         String
+  latitude        Float
+  longitude       Float
+  availableFrom   String
+  availableUntil  String
+  notes           String?
+  status          DonationStatus   @default(DISPONIVEL)
+  urgency         UrgencyLevel     @default(MEDIA)
+  donorId         String
+  donor           User             @relation(fields: [donorId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  requests        DonationRequest[]
+  delivery        Delivery?
+
+  @@map("donations")
+}
+
+model DonationRequest {
+  id              String        @id @default(uuid())
+  donationId      String
+  donation        Donation      @relation(fields: [donationId], references: [id])
+  beneficiaryId   String
+  beneficiary     User          @relation(fields: [beneficiaryId], references: [id])
+  status          RequestStatus @default(PENDENTE)
+  message         String?
+  scheduledAt     DateTime?
+  pickupAddress   String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("donation_requests")
+}
+
+model Delivery {
+  id              String         @id @default(uuid())
+  donationId      String         @unique
+  donation        Donation       @relation(fields: [donationId], references: [id])
+  volunteerId     String
+  volunteer       User           @relation("VolunteerDeliveries", fields: [volunteerId], references: [id])
+  status          DeliveryStatus @default(PENDENTE)
+  pickupTime      DateTime?
+  deliveryTime    DateTime?
+  routeDistance   Float?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@map("deliveries")
+}
+
+model Achievement {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String
+  description String
+  icon        String
+  points      Int      @default(0)
+  threshold   Float?
+  createdAt   DateTime @default(now())
+
+  users       UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  earnedAt      DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  rating      Int
+  comment     String?
+  reviewerId  String
+  reviewer    User     @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  reviewedId  String
+  reviewed    User     @relation("ReviewsReceived", fields: [reviewedId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@map("reviews")
+}
+
+model PlatformStats {
+  id                    String   @id @default("platform-stats")
+  totalKgSaved          Float    @default(2847)
+  familiesBenefited     Int      @default(1324)
+  mealsGenerated        Int      @default(8542)
+  activeVolunteers      Int      @default(412)
+  partnerEstablishments Int      @default(327)
+  totalDonations        Int      @default(1893)
+  co2AvoidedKg          Float    @default(5694)
+  wasteReductionPercent Float    @default(34.5)
+  updatedAt             DateTime @updatedAt
+
+  @@map("platform_stats")
+}

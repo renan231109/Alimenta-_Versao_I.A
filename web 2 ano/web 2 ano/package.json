@@ -1,0 +1,14 @@
+{
+  "name": "alimenta-plus",
+  "version": "1.0.0",
+  "description": "Plataforma para combater insegurança alimentar e reduzir desperdício",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "setup": "cd backend && npm install && npm run db:setup && cd ../frontend && npm install",
+    "db:up": "docker-compose up -d",
+    "db:seed": "cd backend && npm run db:seed",
+    "vercel-build": "cd frontend && npm install && tsc && vite build"
+  }
+}
