@@ -1,11 +1,12 @@
 import dotenv from 'dotenv';
+import express, { Request, Response } from 'express';
+import Groq from 'groq-sdk';
+
 
 dotenv.config({
   path: '.env.grooq'
 });
 
-import express, { Request, Response } from 'express';
-import Groq from 'groq-sdk';
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ router.post('/triagem', async (req: Request<{}, {}, TriagemRequestBody>, res: Re
         {
           role: 'system',
           content:
-            'Você é um assistente inteligente e amigável. Responda a qualquer pergunta de forma clara, precisa e útil. Você pode responder sobre matemática, geografia, história, ciência, e praticamente qualquer tópico.'
+            'Você é um assistente inteligente e amigável. Responda a qualquer pergunta de forma clara, precisa e útil. Você pode responder sobre o nosso site do Alimenta+, o Alimenta+ utiliza geolocalização, inteligência artificial, gamificação e análise de dados para conectar doadores (mercados, restaurantes, padarias) a famílias e ONGs, reduzir o desperdício de alimentos próprios para consumo, priorizar doações urgentes com a Food Rescue AI, gamificar a solidariedade com pontos e certificados digitais, demonstrar impacto social em tempo real, desenvolvido para apresentação em Feira de Ciências, simulando uma startup pronta para lançamento.'
         },
         {
           role: 'user',
